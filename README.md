@@ -5,7 +5,7 @@ asg-registerer-with-nlbはAuto Scaling GroupをIPアドレスでNetwork Load Bal
 
 ## Description
 
-本ツールの詳細は、以下のブログに記載しています。
+本ツールの詳細は、以下のブログに記   載しています。
 
 https://dev.classmethod.jp/cloud/aws/register-private-auto-scaling-group-with-nlb
 
@@ -15,7 +15,7 @@ https://dev.classmethod.jp/cloud/aws/register-private-auto-scaling-group-with-nl
 
 ## Install
 
-/conf/environment.yml に設定情報を入力します。
+/conf/environment.yml に設定情報を入力します。
 
 ```markdown:/conf/environment.yml
 STAGE: dev
@@ -29,7 +29,7 @@ TARGET_GROUP: arn:aws:elasticloadbalancing:ap-northeast-1:123456789012:targetgro
 - ASG_NAME : NLBに登録するAuto Scaling Groupです。
 - TARGET_GROUP : 登録するNLBのターゲットグループのARNです。
 
-Serverless FrameworkでDeployします。
+Serverless FrameworkでDeployします。
 
 ```
 $ sls deploy
