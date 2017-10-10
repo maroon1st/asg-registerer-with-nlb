@@ -1,0 +1,71 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: nlb-asg
+
+# You can pin your service to only deploy with a specific Serverless version
+# Check out our docs for more details
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  stage: ${self:custom.configfile.environment.STAGE}
+  region: ${self:custom.configfile.environment.AWS_REGION}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ec2:DescribeInstances"
+        - "ec2:TerminateInstances"
+        - "elasticloadbalancing:DeregisterTargets"
+        - "elasticloadbalancing:DescribeTargetGroups"
+        - "elasticloadbalancing:DescribeTargetHealth"
+        - "elasticloadbalancing:RegisterTargets"
+      Resource: "*"
+custom:
+  configfile:
+    environment: ${file(./conf/environment.yml)}
+
+functions:
+  launch_ec2:
+    handler: launch_ec2.lambda_handler
+    name: nlb-asg-${self:provider.stage}-launch-ec2
+    runtime: python3.6
+    memorySize: 128
+    timeout: 60
+    events:
+      - cloudwatchEvent:
+          event:
+            source:
+            - aws.autoscaling
+            detail-type:
+            - EC2 Instance Launch Successful
+            detail:
+              AutoScalingGroupName:
+              - ${self:custom.configfile.environment.ASG_NAME}
+    environment:
+      TARGET_GROUP: ${self:custom.configfile.environment.TARGET_GROUP}
+
+  unhealthy_ec2:
+    handler: unhealthy_ec2.lambda_handler
+    name: nlb-asg-${self:provider.stage}-unhealthy_ec2
+    runtime: python3.6
+    memorySize: 128
+    timeout: 60
+    events:
+      - schedule:
+          name: nlb-asg-${self:provider.stage}-unhealthy-check
+          description: 'Check Unhealthy IP Address for NLB'
+          rate: rate(1 minute)
+          enabled: true
+    environment:
+      TARGET_GROUP: ${self:custom.configfile.environment.TARGET_GROUP}
