@@ -38,7 +38,7 @@ custom:
 functions:
   launch_ec2:
     handler: launch_ec2.lambda_handler
-    name: nlb-asg-${self:provider.stage}-launch-ec2
+    name: nlb-asg-${self:provider.stage}-launch_ec2
     runtime: python3.6
     memorySize: 128
     timeout: 60

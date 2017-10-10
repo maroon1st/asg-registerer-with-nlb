@@ -5,7 +5,7 @@ asg-registerer-with-nlbはAuto Scaling GroupをIPアドレスでNetwork Load Bal
 
 ## Description
 
-本ツールの詳細は、以下のブログに記   載しています。
+本ツールの詳細は、以下のブログに記載しています。
 
 https://dev.classmethod.jp/cloud/aws/register-private-auto-scaling-group-with-nlb
 
